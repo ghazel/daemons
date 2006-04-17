@@ -1,0 +1,48 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<!DOCTYPE KDevPrjSession>
+<KDevPrjSession>
+ <DocsAndViews NumberOfDocuments="11" >
+  <Doc0 NumberOfViews="1" URL="file:///home/uehli/Projects/daemons/lib/daemons.rb" >
+   <View0 Type="Source" />
+  </Doc0>
+  <Doc1 NumberOfViews="1" URL="file:///home/uehli/Projects/daemons/README" >
+   <View0 line="65" Type="Source" />
+  </Doc1>
+  <Doc2 NumberOfViews="1" URL="file:///home/uehli/Projects/daemons/lib/daemons/daemonize.rb" >
+   <View0 line="54" Type="Source" />
+  </Doc2>
+  <Doc3 NumberOfViews="1" URL="file:///home/uehli/Projects/daemons/lib/daemons/application.rb" >
+   <View0 line="166" Type="Source" />
+  </Doc3>
+  <Doc4 NumberOfViews="1" URL="file:///home/uehli/Projects/daemons/lib/daemons/application_group.rb" >
+   <View0 line="52" Type="Source" />
+  </Doc4>
+  <Doc5 NumberOfViews="1" URL="file:///home/uehli/Projects/daemons/lib/daemons/pidfile.rb" >
+   <View0 line="0" Type="Source" />
+  </Doc5>
+  <Doc6 NumberOfViews="1" URL="file:///home/uehli/Projects/daemons/Releases" >
+   <View0 line="8" Type="Source" />
+  </Doc6>
+  <Doc7 NumberOfViews="1" URL="file:///home/uehli/Projects/daemons/lib/daemons/controller.rb" >
+   <View0 line="35" Type="Source" />
+  </Doc7>
+  <Doc8 NumberOfViews="1" URL="file:///home/uehli/Projects/daemons/examples/run/ctrl_proc.rb" >
+   <View0 line="15" Type="Source" />
+  </Doc8>
+  <Doc9 NumberOfViews="1" URL="file:///home/uehli/Projects/daemons/examples/run/ctrl_normal.rb" >
+   <View0 line="11" Type="Source" />
+  </Doc9>
+  <Doc10 NumberOfViews="1" URL="file:///home/uehli/Projects/daemons/examples/run/myserver.rb" >
+   <View0 line="0" Type="Source" />
+  </Doc10>
+ </DocsAndViews>
+ <pluginList>
+  <kdevbookmarks>
+   <bookmarks/>
+  </kdevbookmarks>
+  <kdevrbdebugger>
+   <breakpointList/>
+   <watchExpressions/>
+  </kdevrbdebugger>
+ </pluginList>
+</KDevPrjSession>

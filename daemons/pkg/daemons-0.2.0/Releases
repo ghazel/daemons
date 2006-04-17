@@ -1,0 +1,17 @@
+= Daemons Release History
+
+== Release 0.0.1: Feb 8, 2005
+
+* Initial release
+ 
+ 
+== Release 0.2.0: Mar 21, 2005
+
+* Exception backtrace functionality added
+* Exec functionality added
+* More examples added
+* New commands: status, zap
+
+== Release 0.2.1: Mar 21, 2005
+
+* Bugfix for a problem with the 'status' command

@@ -1,0 +1,91 @@
+= Daemons Version 0.0.1
+
+(See Releases for release-specific information)
+
+== What is Daemons?
+
+Daemons provides an easy way to wrap existing ruby scripts (for example a self-written server) 
+to be <i>run as a daemon</i> and to be <i>controlled by simple start/stop/restart commands</i>.
+
+Daemons includes the <tt>daemonize.rb</tt> script written by <i>Travis Whitton</i> to do the daemonization
+process.
+
+== Basic Usage
+
+Layout: suppose you have your self-written server <tt>myserver.rb</tt>:
+
+  # this is myserver.rb
+  # it does nothing really useful at the moment
+  
+  loop do
+    sleep(5)
+  end
+  
+To use <tt>myserver.rb</tt> in a production environment, you need to be able to
+run <tt>myserver.rb</tt> in the _background_ (this means detach it from the console, fork it
+in the background, release any directories and file descriptors).
+
+Just create <tt>myserver_control.rb</tt> like this:
+
+  # this is myserver_control.rb
+  
+  require 'rubygems'        # if you use RubyGems
+  require 'daemons'
+  
+  Daemons.run('myserver.rb')
+  
+And use it like this from the console:
+
+  $ ruby myserver_control.rb start
+      (myserver.rb is now running in the background)
+  $ ruby myserver_control.rb restart
+      (...)
+  $ ruby myserver_control.rb stop
+  
+For testing purposes you can even run <tt>myserver.rb</tt> <i>without forking</i> in the background:
+
+  $ ruby myserver_control.rb run
+
+An additional nice feature of Daemons is that you can pass <i>additional arguments</i> to the script that 
+should be daemonized by seperating them by two _hyphens_:
+  
+  $ ruby myserver_control.rb start -- --file=anyfile --a_switch another_argument
+  
+For further documentation, refer to the module documentation of Daemons.
+
+  
+== Download and Installation
+
+*Download*: just go to http://rubyforge.org/projects/daemons/
+
+Installation *with* RubyGems:
+  $ su
+  # gem install daemons
+  
+Installation *without* RubyGems:
+  $ tar xfz daemons-x.x.x.tar.gz
+  $ cd daemons-x.x.x
+  $ su
+  # ruby setup.rb
+  
+== Documentation
+
+For further documentation, refer to the module documentation of Daemons (click on Daemons).
+
+The RDoc documentation is also online at http://daemons.rubyforge.org
+
+
+== Author
+
+Written in 2005 by Thomas Uehlinger <mailto:th.uehlinger@gmx.ch>
+
+== License
+
+The Daemons script is copywrited free software by Thomas Uehlinger
+<mailto:th.uehlinger@gmx.ch>. You can redistribute it under the terms specified in
+the COPYING file of the Ruby distribution.
+
+
+== Feedback and other resources
+
+At http://rubyforge.org/projects/daemons.
