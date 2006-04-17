@@ -1,0 +1,46 @@
+# Logfile created on Sun Mar 06 21:52:13 CET 2005 by logger.rb/1.5.2.4
+E, [2005-03-06T21:52:48.010793 #5931] ERROR -- : CRASH! (RuntimeError)
+/home/uehli/Projects/daemons/examples/myserver_crashing.rb:13
+/home/uehli/Projects/daemons/examples/myserver_crashing.rb:6:in `loop'
+/home/uehli/Projects/daemons/examples/myserver_crashing.rb:6
+/home/uehli/Projects/daemons/lib/daemons.rb:116:in `load'
+/home/uehli/Projects/daemons/lib/daemons.rb:116:in `run_via_load'
+/home/uehli/Projects/daemons/lib/daemons.rb:91:in `start'
+/home/uehli/Projects/daemons/lib/daemons.rb:296:in `run'
+/home/uehli/Projects/daemons/lib/daemons.rb:389:in `run'
+/home/uehli/Projects/daemons/lib/daemons.rb:388:in `call'
+/home/uehli/Projects/daemons/lib/daemons/cmdline.rb:90:in `catch_exceptions'
+/home/uehli/Projects/daemons/lib/daemons.rb:388:in `run'
+ctrl_crash.rb:16
+E, [2005-03-20T13:28:58.827943 #4467] ERROR -- : CRASH! (RuntimeError)
+/home/uehli/Desktop/daemons-current/examples/myserver_crashing.rb:13
+/home/uehli/Desktop/daemons-current/examples/myserver_crashing.rb:6:in `loop'
+/home/uehli/Desktop/daemons-current/examples/myserver_crashing.rb:6
+/home/uehli/Desktop/daemons-current/lib/daemons.rb:116:in `load'
+/home/uehli/Desktop/daemons-current/lib/daemons.rb:116:in `run_via_load'
+/home/uehli/Desktop/daemons-current/lib/daemons.rb:90:in `start'
+/home/uehli/Desktop/daemons-current/lib/daemons.rb:328:in `run'
+/home/uehli/Desktop/daemons-current/lib/daemons.rb:436:in `run'
+/home/uehli/Desktop/daemons-current/lib/daemons.rb:435:in `call'
+/home/uehli/Desktop/daemons-current/lib/daemons/cmdline.rb:90:in `catch_exceptions'
+/home/uehli/Desktop/daemons-current/lib/daemons.rb:435:in `run'
+examples/ctrl_crash.rb:16
+E, [2005-04-08T15:35:09.486760 #7307] ERROR -- : failed to allocate memory (NoMemoryError)
+
+E, [2005-04-08T15:35:09.504333 #7307] ERROR -- : stack level too deep (SystemStackError)
+
+E, [2005-04-08T15:35:09.504586 #7307] ERROR -- : exception reentered (fatal)
+
+E, [2005-04-08T15:35:09.506491 #7307] ERROR -- : CRASH! (RuntimeError)
+/home/uehli/Desktop/daemons-current/examples/myserver_crashing.rb:13
+/home/uehli/Desktop/daemons-current/examples/myserver_crashing.rb:6:in `loop'
+/home/uehli/Desktop/daemons-current/examples/myserver_crashing.rb:6
+/home/uehli/Desktop/daemons-current/lib/daemons.rb:116:in `load'
+/home/uehli/Desktop/daemons-current/lib/daemons.rb:116:in `run_via_load'
+/home/uehli/Desktop/daemons-current/lib/daemons.rb:90:in `start'
+/home/uehli/Desktop/daemons-current/lib/daemons.rb:359:in `run'
+/home/uehli/Desktop/daemons-current/lib/daemons.rb:469:in `run'
+/home/uehli/Desktop/daemons-current/lib/daemons.rb:468:in `call'
+/home/uehli/Desktop/daemons-current/lib/daemons/cmdline.rb:94:in `catch_exceptions'
+/home/uehli/Desktop/daemons-current/lib/daemons.rb:468:in `run'
+ctrl_crash.rb:17
