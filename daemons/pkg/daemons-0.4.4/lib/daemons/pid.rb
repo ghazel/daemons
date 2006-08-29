@@ -4,8 +4,19 @@ module Daemons
   class Pid
   
     def Pid.running?(pid, additional = nil)
-      output = `ps ax`
-      return (/#{pid} / =~ output and (additional ? /#{additional}/ =~ output : true))
+      match_pid = Regexp.new("^\s*#{pid}\s")
+      got_match = false
+
+      ps_all = IO.popen("ps ax")
+      ps_all.each { |psline|
+        next unless psline =~ match_pid
+        got_match = true
+        got_match = false if additional and psline !~ /#{additional}/
+        break
+      }
+      ps_all.close
+
+      return got_match
     end
     
     

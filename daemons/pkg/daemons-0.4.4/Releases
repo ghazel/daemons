@@ -1,5 +1,9 @@
 = Daemons Release History
 
+== Release 1.0.0: August 29, 2006
+
+* Fix the parsing of the 'ps ax' system call. (thanks to Garance Alistair Drosehn)
+
 == Release 0.4.4: February 14, 2006
 
 * Several fixes that allow us to use the Daemons::Controller 
