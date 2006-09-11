@@ -4,10 +4,10 @@ module Daemons
   class Pid
   
     def Pid.running?(pid, additional = nil)
-      match_pid = Regexp.new("^\s*#{pid}\s")
+      match_pid = Regexp.new("^\\s*#{pid}\\s")
       got_match = false
 
-      ps_all = IO.popen("ps ax")
+      ps_all = IO.popen("ps ax") # the correct syntax is without a dash (-)
       ps_all.each { |psline|
         next unless psline =~ match_pid
         got_match = true

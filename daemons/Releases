@@ -1,5 +1,9 @@
 = Daemons Release History
 
+== Release 1.0.1: August 30, 2006
+
+* Fixed a regex for parsing the 'ps ax' system call. (thanks to Garance Alistair Drosehn)
+
 == Release 1.0.0: August 29, 2006
 
 * Fix the parsing of the 'ps ax' system call. (thanks to Garance Alistair Drosehn)
