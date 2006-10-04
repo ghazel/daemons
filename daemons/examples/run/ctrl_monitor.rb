@@ -1,4 +1,4 @@
-lib_dir = File.expand_path(File.join(File.split(__FILE__)[0], '../../lib'))
+lib_dir = File.expand_path(File.join(File.dirname(__FILE__), '../../lib'))
 
 if File.exists?(File.join(lib_dir, 'daemons.rb'))
   $LOAD_PATH.unshift lib_dir
@@ -13,4 +13,4 @@ options = {
   :monitor => true
 }
 
-Daemons.run(File.join(File.split(__FILE__)[0], 'myserver_crashing.rb'), options)
+Daemons.run(File.join(File.dirname(__FILE__), 'myserver_crashing.rb'), options)

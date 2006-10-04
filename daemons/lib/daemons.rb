@@ -65,7 +65,7 @@ require 'daemons/controller'
 #
 module Daemons
 
-  VERSION = "1.0.1"
+  VERSION = "1.0.2"
   
   require 'daemons/daemonize'
   
@@ -92,7 +92,7 @@ module Daemons
   # <tt>:dir_mode</tt>::  Either <tt>:script</tt> (the directory for writing the pid files to 
   #                       given by <tt>:dir</tt> is interpreted relative
   #                       to the script location given by +script+) or <tt>:normal</tt> (the directory given by 
-  #                       <tt>:dir</tt> is interpreted relative to the current directory) or <tt>:system</tt> 
+  #                       <tt>:dir</tt> is interpreted as a (absolute or relative) path) or <tt>:system</tt> 
   #                       (<tt>/var/run</tt> is used as the pid file directory)
   #
   # <tt>:dir</tt>::       Used in combination with <tt>:dir_mode</tt> (description above)
@@ -120,7 +120,7 @@ module Daemons
   #     :script     => "path/to/script.rb"
   #   }
   #
-  #   Daemons.run(File.join(File.split(__FILE__)[0], 'myscript.rb'), options)
+  #   Daemons.run(File.join(File.dirname(__FILE__), 'myscript.rb'), options)
   #
   def run(script, options = {})
     options[:script] = script
@@ -167,9 +167,10 @@ module Daemons
     options[:mode] = :proc
     options[:proc] = block
     
+    # we do not have a script location so the the :script option cannot be used, change it to :normal
     if [nil, :script].include? options[:dir_mode]
       options[:dir_mode] = :normal
-      options[:dir] = File.split(__FILE__)[0]
+      options[:dir] = File.expand_path('.')
     end
     
     @controller = Controller.new(options, ARGV)
@@ -260,7 +261,6 @@ module Daemons
     @group ||= ApplicationGroup.new('self', options)
     
     @group.new_application(:mode => :none).start
-    
   end
   module_function :daemonize
   

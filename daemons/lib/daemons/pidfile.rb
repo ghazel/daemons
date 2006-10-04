@@ -25,9 +25,9 @@ module Daemons
   # 
   # Daemons is configurable to store the Pid-Files relative to three different locations:
   # 1.  in a directory relative to the directory where the script (the one that is supposed to run
-  #     as a daemon) resides
-  # 2.  in a directory relative to the current directory or the filesystem root
-  # 3.  in the preconfigured directory <tt>/var/run</tt>
+  #     as a daemon) resides (<tt>:script</tt> option for <tt>:dir_mode</tt>)
+  # 2.  in a directory given by <tt>:dir</tt> (<tt>:normal</tt> option for <tt>:dir_mode</tt>)
+  # 3.  in the preconfigured directory <tt>/var/run</tt> (<tt>:system</tt> option for <tt>:dir_mode</tt>)
   #
   class PidFile < Pid
 

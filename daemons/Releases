@@ -1,5 +1,14 @@
 = Daemons Release History
 
+== Release 1.0.2: September 26, 2006
+
+* Changed the 'ps -ax' call back to 'ps ax'.
+* Fixed the documentation for the :normal :dir_mode.
+* As a default for Daemons.run_proc, the pid file is now saved in the current directory.
+* In :ontop mode for running a proc (this is equal to calling something like 'ruby ctrl_proc.rb run'), 
+  the proc now runs directly in the calling script, not in a forked process anymore (thanks to Paul Butcher).
+* Set $0 to app_name in the daemons (thanks to Ilya Novoselov).
+
 == Release 1.0.1: August 30, 2006
 
 * Fixed a regex for parsing the 'ps ax' system call. (thanks to Garance Alistair Drosehn)

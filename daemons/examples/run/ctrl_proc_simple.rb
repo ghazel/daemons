@@ -8,8 +8,10 @@ end
 
 require 'daemons'
 
-
-options = {
-}
-
-Daemons.run(File.join(File.dirname(__FILE__), 'myserver_exiting.rb'), options)
+           
+Daemons.run_proc('ctrl_proc_simple.rb') do
+  loop do
+    puts 'ping from proc!'
+    sleep(3)
+  end
+end

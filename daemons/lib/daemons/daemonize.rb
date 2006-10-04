@@ -113,7 +113,7 @@ module Daemonize
   
   
   def simulate(logfile_name = nil)
-    # NOTE: STDOUT and STDERR will not be redirected to the logfile!
+    # NOTE: STDOUT and STDERR will not be redirected to the logfile, because in :ontop mode, we normally want to see the output
     
     Dir.chdir "/"   # Release old working directory
     File.umask 0000 # Insure sensible umask
@@ -139,7 +139,7 @@ module Daemonize
   module_function :simulate
   
   
-  def call_as_daemon(block, logfile_name = nil, oldmode = 0)
+  def call_as_daemon(block, logfile_name = nil, app_name = nil)
     rd, wr = IO.pipe
     
     if tmppid = safefork
@@ -152,6 +152,8 @@ module Daemonize
       
       return pid
     else
+      # child
+      
       rd.close
       
       # Detach from the controlling terminal
@@ -160,13 +162,15 @@ module Daemonize
       end
   
       # Prevent the possibility of acquiring a controlling terminal
-      if oldmode.zero?
+      #if oldmode.zero?
         trap 'SIGHUP', 'IGNORE'
         exit if pid = safefork
-      end
+      #end
   
       wr.write Process.pid
       wr.close
+      
+      $0 = app_name if app_name
       
       Dir.chdir "/"   # Release old working directory
       File.umask 0000 # Insure sensible umask
@@ -210,7 +214,7 @@ module Daemonize
   
   
   # This method causes the current running process to become a daemon
-  def daemonize(logfile_name = nil, oldmode=0)
+  def daemonize(logfile_name = nil, app_name = nil)
     srand # Split rand streams between spawning and daemonized process
     safefork and exit # Fork and exit from the parent
 
@@ -220,11 +224,13 @@ module Daemonize
     end
 
     # Prevent the possibility of acquiring a controlling terminal
-    if oldmode.zero?
+    #if oldmode.zero?
       trap 'SIGHUP', 'IGNORE'
       exit if pid = safefork
-    end
+    #end
 
+    $0 = app_name if app_name
+    
     Dir.chdir "/"   # Release old working directory
     File.umask 0000 # Insure sensible umask
 
@@ -258,7 +264,8 @@ module Daemonize
      
     STDERR.reopen STDOUT rescue nil           
     
-    return oldmode ? sess_id : 0   # Return value is mostly irrelevant
+    #return oldmode ? sess_id : 0   # Return value is mostly irrelevant
+    return sess_id
   end
   module_function :daemonize
   

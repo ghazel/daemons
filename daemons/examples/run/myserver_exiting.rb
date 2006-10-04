@@ -4,5 +4,5 @@ loop do
   
   sleep(3)
   
-  Process.exit!
+  Process.exit
 end

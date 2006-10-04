@@ -7,7 +7,7 @@ module Daemons
       match_pid = Regexp.new("^\\s*#{pid}\\s")
       got_match = false
 
-      ps_all = IO.popen("ps ax") # the correct syntax is without a dash (-)
+      ps_all = IO.popen("ps ax") # the correct syntax is without a dash (-) !
       ps_all.each { |psline|
         next unless psline =~ match_pid
         got_match = true
@@ -16,6 +16,9 @@ module Daemons
       }
       ps_all.close
 
+      # an alternative would be to use the code below, but I don't know whether this is portable
+      # `ps axo pid=`.split.include? pid.to_s
+       
       return got_match
     end
     
@@ -29,14 +32,14 @@ module Daemons
     # If no valid directory is found, returns nil.
     #
     def Pid.dir(dir_mode, dir, script)
-      # nil script parameter is allowed so long as dir_mode is not :script
+      # nil script parameter is allowed as long as dir_mode is not :script
       return nil if dir_mode == :script && script.nil?                         
       
       case dir_mode
         when :normal
           return File.expand_path(dir)
         when :script
-          return File.expand_path(File.join(File.split(script)[0],dir))
+          return File.expand_path(File.join(File.dirname(script),dir))
         when :system  
           return '/var/run'
         else

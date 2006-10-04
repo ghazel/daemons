@@ -26,7 +26,7 @@ module Daemons
       
       unless @pid = pid
         if dir = pidfile_dir
-          @pid = PidFile.new(pidfile_dir(), @group.app_name, @group.multiple)
+          @pid = PidFile.new(dir, @group.app_name, @group.multiple)
         else
           @pid = PidMem.new
         end
@@ -45,9 +45,11 @@ module Daemons
       (options[:log_output] && pidfile_dir()) ? File.join(pidfile_dir(), @group.app_name + '.output') : nil
     end
     
+    
+    # this function is only used to daemonize the currently running process (Daemons.daemonize)
     def start_none
       unless options[:ontop]
-        Daemonize.daemonize #(logfile)
+        Daemonize.daemonize(nil, @group.app_name) #(logfile)
       else
         Daemonize.simulate
       end
@@ -86,11 +88,12 @@ module Daemons
     
     def start_exec
       unless options[:ontop]
-        Daemonize.daemonize(logfile)
+        Daemonize.daemonize(logfile, @group.app_name)
       else
         Daemonize.simulate(logfile)
       end
       
+      # note that we cannot remove the pid file if we run in :ontop mode (i.e. 'ruby ctrl_exec.rb run')
       @pid.pid = Process.pid
         
       ENV['DAEMONS_ARGV'] = @controller_argv.join(' ')      
@@ -101,7 +104,7 @@ module Daemons
     
     def start_load
       unless options[:ontop]
-        Daemonize.daemonize(logfile)
+        Daemonize.daemonize(logfile, @group.app_name)
       else
         Daemonize.simulate(logfile)
       end
@@ -137,7 +140,7 @@ module Daemons
         exit
       }
       
-      # Know we really start the script...
+      # Now we really start the script...
       $DAEMONS_ARGV = @controller_argv
       ENV['DAEMONS_ARGV'] = @controller_argv.join(' ')
       
@@ -149,32 +152,71 @@ module Daemons
     end
     
     def start_proc
-      return unless options[:proc]
+      return unless p = options[:proc]
+      
+      myproc = proc do
+        # We need this to remove the pid-file if the applications exits by itself.
+        # Note that <tt>at_text</tt> will only be run if the applications exits by calling 
+        # <tt>exit</tt>, and not if it calls <tt>exit!</tt> (so please don't call <tt>exit!</tt>
+        # in your application!
+        #
+        at_exit {
+          @pid.cleanup rescue nil
+
+          # If the option <tt>:backtrace</tt> is used and the application did exit by itself
+          # create a exception log.
+          if options[:backtrace] and not options[:ontop] and not $daemons_sigterm
+            exception_log() rescue nil
+          end
+
+        }
+
+        # This part is needed to remove the pid-file if the application is killed by 
+        # daemons or manually by the user.
+        # Note that the applications is not supposed to overwrite the signal handler for
+        # 'TERM'.
+        #
+        trap('TERM') {
+          @pid.cleanup rescue nil
+          $daemons_sigterm = true
+
+          exit
+        }
+        
+        p.call()
+      end
       
       unless options[:ontop]
-        @pid.pid = Daemonize.call_as_daemon(options[:proc], logfile)
+        @pid.pid = Daemonize.call_as_daemon(myproc, logfile, @group.app_name)
       else
-#         Daemonize.simulate(logfile)
-#         
-#         @pid.pid = Process.pid
-#         
+        Daemonize.simulate(logfile)
+        
+        @pid.pid = Process.pid
+        
+        myproc.call
+        
+# why did we use this??
 #         Thread.new(&options[:proc])
-        unless @pid.pid = Process.fork
-          Daemonize.simulate(logfile)
-          options[:proc].call
-          exit
-        else
-          Process.detach(@pid.pid)
-        end
+
+# why did we use the code below??
+        # unless pid = Process.fork
+        #   @pid.pid = pid
+        #   Daemonize.simulate(logfile)
+        #   options[:proc].call
+        #   exit
+        # else
+        #   Process.detach(@pid.pid)
+        # end
       end
     end
     
     
     def start
-      @group.create_monitor(@group.applications[0] || self)
+      @group.create_monitor(@group.applications[0] || self) unless options[:ontop]  # we don't monitor applications in the foreground
       
       case options[:mode]
         when :none
+          # this is only used to daemonize the currently running process
           start_none
         when :exec
           start_exec

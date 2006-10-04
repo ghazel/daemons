@@ -32,7 +32,7 @@ module Daemons
         @app_name ||= File.split(@script)[1]
       end
     
-      @app_name = options[:app_name] if options[:app_name]
+      @app_name ||= 'unknown_application'
       
       @command, @controller_part, @app_part = Controller.split_argv(argv)
     
