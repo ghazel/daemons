@@ -38,7 +38,7 @@ require 'daemons/controller'
 #
 # == What does daemons internally do with my daemons?
 # *or*:: why do my daemons crash when they try to open a file?
-# *or*:: why can I not see any output from the daemon on the console (when using for example +puts+?
+# *or*:: why can I not see any output from the daemon on the console (when using for example +puts+)?
 #
 # From a technical aspect of view, daemons does the following when creating a daemon:
 #
@@ -48,7 +48,7 @@ require 'daemons/controller'
 # 3.  Forks another child process and exits first child. This prevents
 #     the potential of acquiring a controlling terminal.
 # 4.  Changes the current working directory to "/".
-# 5.  Clears the file creation mask (sets +umask+ to +0000+).
+# 5.  Clears the file creation mask (sets +umask+ to 0000).
 # 6.  Closes file descriptors (reopens +STDOUT+ and +STDERR+ to point to a logfile if
 #     possible).
 #
@@ -65,7 +65,7 @@ require 'daemons/controller'
 #
 module Daemons
 
-  VERSION = "1.0.9"
+  VERSION = "1.0.10"
   
   require 'daemons/daemonize'
   
@@ -90,6 +90,9 @@ module Daemons
   #                       and log files. Defaults to the basename of
   #                       the script.
   # <tt>:ARGV</tt>::      An array of strings containing parameters and switches for Daemons.
+  #                       This includes both parameters for Daemons itself and the controlled scripted.
+  #                       These are assumed to be separated by an array element '--', .e.g.
+  #                       ['start', 'f', '--', 'param1_for_script', 'param2_for_script'].
   #                       If not given, ARGV (the parameters given to the Ruby process) will be used.
   # <tt>:dir_mode</tt>::  Either <tt>:script</tt> (the directory for writing the pid files to 
   #                       given by <tt>:dir</tt> is interpreted relative
@@ -107,23 +110,23 @@ module Daemons
   # <tt>:backtrace</tt>:: Write a backtrace of the last exceptions to the file '[app_name].log' in the 
   #                       pid-file directory if the application exits due to an uncaught exception
   # <tt>:monitor</tt>::   Monitor the programs and restart crashed instances
-  # <tt>:log_output</tt>:: When given (i.e. set to true), redirect both STDOUT and STDERR to a logfile 
-  #                       named '[app_name].output' in the pid-file directory
-  #
+  # <tt>:log_output</tt>:: When given (i.e. set to true), redirect both STDOUT and STDERR to a logfile named '[app_name].output' in the pid-file directory
+  # <tt>:keep_pid_files</tt>:: When given do not delete lingering pid-files (files for which the process is no longer running).
+  # <tt>:hard_exit</tt>:: When given use exit! to end a daemons instead of exit (this will for example
+  #                       not call at_exit handlers).
   # -----
   # 
   # === Example:
   #   options = {
   #     :app_name   => "my_app",
-  #     :ARGV       => ['start', '-f']
+  #     :ARGV       => ['start', '-f', '--', 'param_for_myscript']
   #     :dir_mode   => :script,
   #     :dir        => 'pids',
   #     :multiple   => true,
   #     :ontop      => true,
   #     :mode       => :exec,
   #     :backtrace  => true,
-  #     :monitor    => true,
-  #     :script     => "path/to/script.rb"
+  #     :monitor    => true
   #   }
   #
   #   Daemons.run(File.join(File.dirname(__FILE__), 'myscript.rb'), options)
@@ -173,7 +176,7 @@ module Daemons
     options[:mode] = :proc
     options[:proc] = block
     
-    # we do not have a script location so the the :script option cannot be used, change it to :normal
+    # we do not have a script location so the the :script :dir_mode cannot be used, change it to :normal
     if [nil, :script].include? options[:dir_mode]
       options[:dir_mode] = :normal
       options[:dir] = File.expand_path('.')

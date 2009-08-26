@@ -39,7 +39,7 @@ module Daemons
   #        break
   #      }
   #    ensure
-  #      begin; begin; ps_in.close; rescue ::Exception; end; ps_out.close rescue nil; ps_err.close; rescue ::Exception; end
+  #      begin; begin; ps_in.close; rescue ::Exception; end; begin; ps_out.close; rescue ::Exception; end; ps_err.close; rescue ::Exception; end
   #    end
   #    
   #    # an alternative would be to use the code below, but I don't know whether this is portable

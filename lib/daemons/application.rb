@@ -19,6 +19,9 @@ module Daemons
     attr_reader :options
     
     
+    SIGNAL = (RUBY_PLATFORM =~ /win32/ ? 'KILL' : 'TERM')
+    
+    
     def initialize(group, add_options = {}, pid = nil)
       @group = group
       @options = group.options.dup
@@ -85,15 +88,23 @@ module Daemons
       # Note that the applications is not supposed to overwrite the signal handler for
       # 'TERM'.
       #
-      trap('TERM') {
+      trap(SIGNAL) {
         begin; @pid.cleanup; rescue ::Exception; end
         $daemons_sigterm = true
         
-        exit
+        if options[:hard_exit]
+          exit!
+        else
+          exit
+        end
       }
     end
     
     def start_exec
+      if options[:backtrace]
+        puts "option :backtrace is not supported with :mode => :exec, ignoring"
+      end
+      
       unless options[:ontop]
         Daemonize.daemonize(output_logfile, @group.app_name)
       else
@@ -105,6 +116,8 @@ module Daemons
         
       ENV['DAEMONS_ARGV'] = @controller_argv.join(' ')      
       # haven't tested yet if this is really passed to the exec'd process...
+      
+      
       
       Kernel.exec(script(), *(@app_argv || []))
       #Kernel.exec(script(), *ARGV)
@@ -141,11 +154,15 @@ module Daemons
       # Note that the applications is not supposed to overwrite the signal handler for
       # 'TERM'.
       #
-      trap('TERM') {
+      trap(SIGNAL) {
         begin; @pid.cleanup; rescue ::Exception; end
         $daemons_sigterm = true
         
-        exit
+        if options[:hard_exit]
+          exit!
+        else
+          exit
+        end
       }
       
       # Now we really start the script...
@@ -161,8 +178,8 @@ module Daemons
     
     def start_proc
       return unless p = options[:proc]
-      
-      myproc = proc do
+    
+      myproc = proc do 
         # We need this to remove the pid-file if the applications exits by itself.
         # Note that <tt>at_text</tt> will only be run if the applications exits by calling 
         # <tt>exit</tt>, and not if it calls <tt>exit!</tt> (so please don't call <tt>exit!</tt>
@@ -184,11 +201,15 @@ module Daemons
         # Note that the applications is not supposed to overwrite the signal handler for
         # 'TERM'.
         #
-        trap('TERM') {
+        trap(SIGNAL) {
           begin; @pid.cleanup; rescue ::Exception; end
           $daemons_sigterm = true
 
-          exit
+          if options[:hard_exit]
+            exit!
+          else
+            exit
+          end
         }
         
         p.call()
@@ -270,17 +291,19 @@ module Daemons
       
       l_file = Logger.new(logfile)
       
-      # the code below only logs the last exception
-#       e = nil
-#       
-#       ObjectSpace.each_object {|o|
-#         if ::Exception === o
-#           e = o
-#         end
-#       }
-#       
-#       l_file.error e
-#       l_file.close
+      # the code below finds the last exception
+      e = nil
+      
+      ObjectSpace.each_object {|o|
+        if ::Exception === o
+          e = o
+        end
+      }
+     
+      l_file.info "*** below you find the most recent exception thrown, this will be likely (but not certainly) the exception that made the application exit abnormally ***"
+      l_file.error e
+      
+      l_file.info "*** below you find all exception objects found in memory, some of them may have been thrown in your application, others may just be in memory because they are standard exceptions ***"
       
       # this code logs every exception found in memory
       ObjectSpace.each_object {|o|
@@ -304,7 +327,7 @@ module Daemons
       # restarted by the monitor yet. By catching the error, we allow the
       # pid file clean-up to occur.
       begin
-        Process.kill('TERM', @pid.pid)
+        Process.kill(SIGNAL, @pid.pid)
       rescue Errno::ESRCH => e
         puts "#{e} #{@pid.pid}"
         puts "deleting pid-file."

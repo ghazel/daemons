@@ -41,6 +41,8 @@ module Daemons
       @dir_mode = options[:dir_mode] || :script
       @dir = options[:dir] || ''
       
+      @keep_pid_files = options[:keep_pid_files] || false
+      
       #@applications = find_applications(pidfile_dir())
       @applications = []
     end
@@ -58,7 +60,7 @@ module Daemons
     end  
     
     def find_applications(dir)
-      pid_files = PidFile.find_files(dir, app_name)
+      pid_files = PidFile.find_files(dir, app_name, ! @keep_pid_files)
       
       #pp pid_files
       
