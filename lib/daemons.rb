@@ -65,7 +65,7 @@ require 'daemons/controller'
 #
 module Daemons
 
-  VERSION = "1.0.8"
+  VERSION = "1.0.9"
   
   require 'daemons/daemonize'
   

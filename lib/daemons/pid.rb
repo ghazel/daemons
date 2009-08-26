@@ -9,14 +9,16 @@ module Daemons
       # Check if process is in existence
       # The simplest way to do this is to send signal '0'
       # (which is a single system call) that doesn't actually
-      # sending a signal
+      # send a signal
       begin
         Process.kill(0, pid)
         return true
       rescue Errno::ESRCH
-        return true
-      rescue Errno::EPERM
         return false
+      rescue ::Exception   # for example on EPERM (process exists but does not belong to us)
+        return true
+      #rescue Errno::EPERM
+      #  return false
       end
     end
     
