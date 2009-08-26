@@ -326,8 +326,12 @@ module Daemons
       # exist. This happens when the process quits and hasn't been
       # restarted by the monitor yet. By catching the error, we allow the
       # pid file clean-up to occur.
+      pid = @pid.pid
       begin
-        Process.kill(SIGNAL, @pid.pid)
+        Process.kill(SIGNAL, pid)
+        while Pid.running?(pid)
+          sleep 0.1
+        end
       rescue Errno::ESRCH => e
         puts "#{e} #{@pid.pid}"
         puts "deleting pid-file."
