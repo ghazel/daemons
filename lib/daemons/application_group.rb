@@ -56,12 +56,10 @@ module Daemons
     end
     
     def pidfile_dir
-      p @dir_mode, @dir, script
       PidFile.dir(@dir_mode, @dir, script)
     end  
     
     def find_applications(dir)
-      p dir, app_name, ! @keep_pid_files
       pid_files = PidFile.find_files(dir, app_name, ! @keep_pid_files)
       
       #pp pid_files
