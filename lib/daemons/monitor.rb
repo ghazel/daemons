@@ -116,14 +116,14 @@ module Daemons
     
     
     def stop
-      pid = @pid.pid
       begin
+        pid = @pid.pid
         Process.kill(Application::SIGNAL, pid)
         while Pid.running?(pid)
           sleep 0.1
         end
       rescue ::Exception => e
-        puts "#{e} #{@pid.pid}"
+        puts "#{e} #{pid}"
         puts "deleting pid-file."
       end
       
