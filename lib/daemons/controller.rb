@@ -78,7 +78,8 @@ module Daemons
             sleep 1
             @group.start_all
           else
-            @group.start_all
+            puts "Warning: no instances running. Starting..."
+            @group.new_application.start
           end
         when 'zap'
           @group.zap_all
