@@ -77,6 +77,8 @@ module Daemons
             @group.stop_all
             sleep 1
             @group.start_all
+          else
+            @group.start_all
           end
         when 'zap'
           @group.zap_all
