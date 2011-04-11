@@ -1,4 +1,13 @@
-require 'open3'
+WINDOWS  = RUBY_PLATFORM.match(/(win|w)32$/)
+ONE_NINE = RUBY_VERSION >= "1.9"
+if WINDOWS
+  if ONE_NINE
+    require 'open3'
+  else
+    require 'rubygems'
+    require 'win32/open3'
+  end
+end
 
 
 module Daemons
