@@ -25,7 +25,7 @@ You can use Daemons in four differet ways:
 
 Layout: suppose you have your self-written server <tt>myserver.rb</tt>:
 
-```
+``` ruby
   # this is myserver.rb
   # it does nothing really useful at the moment
   
@@ -39,7 +39,7 @@ in the background, release all directories and file descriptors).
 
 Just create <tt>myserver_control.rb</tt> like this:
 
-```
+``` ruby
   # this is myserver_control.rb
   
   require 'rubygems'        # if you use RubyGems
@@ -49,7 +49,7 @@ Just create <tt>myserver_control.rb</tt> like this:
 ```  
 And use it like this from the console:
 
-```
+``` bash
   $ ruby myserver_control.rb start
       (myserver.rb is now running in the background)
   $ ruby myserver_control.rb restart
@@ -58,13 +58,13 @@ And use it like this from the console:
 ```  
 For testing purposes you can even run <tt>myserver.rb</tt> <i>without forking</i> in the background:
 
-```
+``` bash
   $ ruby myserver_control.rb run
 ```
 An additional nice feature of Daemons is that you can pass <i>additional arguments</i> to the script that 
 should be daemonized by seperating them by two _hyphens_:
   
-```  
+``` bash
   $ ruby myserver_control.rb start -- --file=anyfile --a_switch another_argument
 ```  
 
@@ -73,7 +73,7 @@ should be daemonized by seperating them by two _hyphens_:
 Layout: suppose you have some code you want to run in the background and control that background process
 from a script:
 
-```
+``` ruby
   # this is your code
   # it does nothing really useful at the moment
   
@@ -83,7 +83,7 @@ from a script:
 ```  
 To run this code as a daemon create <tt>myproc_control.rb</tt> like this and include your code:
 
-```
+``` ruby
   # this is myproc_control.rb
   
   require 'rubygems'        # if you use RubyGems
@@ -97,7 +97,7 @@ To run this code as a daemon create <tt>myproc_control.rb</tt> like this and inc
 ```  
 And use it like this from the console:
 
-```
+``` bash
   $ ruby myproc_control.rb start
       (myproc.rb is now running in the background)
   $ ruby myproc_control.rb restart
@@ -106,7 +106,7 @@ And use it like this from the console:
 ```  
 For testing purposes you can even run <tt>myproc.rb</tt> <i>without forking</i> in the background:
 
-```
+``` bash
   $ ruby myproc_control.rb run
 ```  
 ### 3. Control a bunch of daemons from another application
@@ -114,7 +114,7 @@ For testing purposes you can even run <tt>myproc.rb</tt> <i>without forking</i> 
 Layout: you have an application <tt>my_app.rb</tt> that wants to run a bunch of 
 server tasks as daemon processes.
 
-```
+``` ruby
   # this is my_app.rb
   
   require 'rubygems'        # if you use RubyGems
@@ -150,7 +150,7 @@ server tasks as daemon processes.
 Layout: you have an application <tt>my_daemon.rb</tt> that wants to run as a daemon
 (but without the ability to be controlled by daemons via start/stop commands)
 
-```
+``` ruby
   # this is my_daemons.rb
   
   require 'rubygems'        # if you use RubyGems
@@ -178,13 +178,13 @@ Layout: you have an application <tt>my_daemon.rb</tt> that wants to run as a dae
 
 Installation *with* RubyGems:
 
-```
+``` bash
   $ su
   # gem install daemons
 ```  
 Installation *without* RubyGems:
 
-```
+``` bash
   $ tar xfz daemons-x.x.x.tar.gz
   $ cd daemons-x.x.x
   $ su
