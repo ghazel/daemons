@@ -1,8 +1,8 @@
-= Daemons Version 1.0.11
+# Daemons Version 1.0.11
 
 (See Releases for release-specific information)
 
-== What is Daemons?
+## What is Daemons?
 
 Daemons provides an easy way to wrap existing ruby scripts (for example a self-written server) 
 to be <i>run as a daemon</i> and to be <i>controlled by simple start/stop/restart commands</i>.
@@ -17,66 +17,73 @@ if they crash.
 Daemons includes the <tt>daemonize.rb</tt> script written by <i>Travis Whitton</i> to do the daemonization
 process.
 
-== Basic Usage
+## Basic Usage
 
 You can use Daemons in four differet ways:
 
-=== 1. Create wrapper scripts for your server scripts or applications
+### 1. Create wrapper scripts for your server scripts or applications
 
 Layout: suppose you have your self-written server <tt>myserver.rb</tt>:
 
+```
   # this is myserver.rb
   # it does nothing really useful at the moment
   
   loop do
     sleep(5)
   end
-  
+```  
 To use <tt>myserver.rb</tt> in a production environment, you need to be able to
 run <tt>myserver.rb</tt> in the _background_ (this means detach it from the console, fork it
 in the background, release all directories and file descriptors).
 
 Just create <tt>myserver_control.rb</tt> like this:
 
+```
   # this is myserver_control.rb
   
   require 'rubygems'        # if you use RubyGems
   require 'daemons'
   
   Daemons.run('myserver.rb')
-  
+```  
 And use it like this from the console:
 
+```
   $ ruby myserver_control.rb start
       (myserver.rb is now running in the background)
   $ ruby myserver_control.rb restart
       (...)
   $ ruby myserver_control.rb stop
-  
+```  
 For testing purposes you can even run <tt>myserver.rb</tt> <i>without forking</i> in the background:
 
+```
   $ ruby myserver_control.rb run
-
+```
 An additional nice feature of Daemons is that you can pass <i>additional arguments</i> to the script that 
 should be daemonized by seperating them by two _hyphens_:
   
+```  
   $ ruby myserver_control.rb start -- --file=anyfile --a_switch another_argument
-  
+```  
 
-=== 2. Create wrapper scripts that include your server procs
+### 2. Create wrapper scripts that include your server procs
 
 Layout: suppose you have some code you want to run in the background and control that background process
 from a script:
 
+```
   # this is your code
   # it does nothing really useful at the moment
   
   loop do
     sleep(5)
   end
-  
+```  
 To run this code as a daemon create <tt>myproc_control.rb</tt> like this and include your code:
 
+```
   # this is myproc_control.rb
   
   require 'rubygems'        # if you use RubyGems
@@ -87,24 +94,27 @@ To run this code as a daemon create <tt>myproc_control.rb</tt> like this and inc
       sleep(5)
     end
   end
-  
+```  
 And use it like this from the console:
 
+```
   $ ruby myproc_control.rb start
       (myproc.rb is now running in the background)
   $ ruby myproc_control.rb restart
       (...)
   $ ruby myproc_control.rb stop
-  
+```  
 For testing purposes you can even run <tt>myproc.rb</tt> <i>without forking</i> in the background:
 
+```
   $ ruby myproc_control.rb run
-  
-=== 3. Control a bunch of daemons from another application
+```  
+### 3. Control a bunch of daemons from another application
 
 Layout: you have an application <tt>my_app.rb</tt> that wants to run a bunch of 
 server tasks as daemon processes.
 
+```
   # this is my_app.rb
   
   require 'rubygems'        # if you use RubyGems
@@ -134,12 +144,13 @@ server tasks as daemon processes.
   task2.stop
   
   exit
-  
-=== 4. Daemonize the currently running process
+```  
+### 4. Daemonize the currently running process
 
 Layout: you have an application <tt>my_daemon.rb</tt> that wants to run as a daemon
 (but without the ability to be controlled by daemons via start/stop commands)
 
+```
   # this is my_daemons.rb
   
   require 'rubygems'        # if you use RubyGems
@@ -156,37 +167,41 @@ Layout: you have an application <tt>my_daemon.rb</tt> that wants to run as a dae
     conn = accept_conn()
     serve(conn)
   }
-
+```
   
 <b>For further documentation, refer to the module documentation of Daemons.</b>
 
   
-== Download and Installation
+## Download and Installation
 
 *Download*: just go to http://rubyforge.org/projects/daemons/
 
 Installation *with* RubyGems:
+
+```
   $ su
   # gem install daemons
-  
+```  
 Installation *without* RubyGems:
+
+```
   $ tar xfz daemons-x.x.x.tar.gz
   $ cd daemons-x.x.x
   $ su
   # ruby setup.rb
-  
-== Documentation
+```  
+## Documentation
 
 For further documentation, refer to the module documentation of Daemons (click on Daemons).
 
 The RDoc documentation is also online at http://daemons.rubyforge.org
 
 
-== Author
+## Author
 
 Written in 2005-2008 by Thomas Uehlinger <mailto:th.uehlinger@gmx.ch>.
 
-== License
+## License
 
 Copyright (c) 2005-2008 Thomas Uehlinger
 
@@ -218,6 +233,6 @@ The Daemonize extension module is copywrited free software by Travis Whitton
 <whitton@atlantic.net>. You can redistribute it under the terms specified in
 the COPYING file of the Ruby distribution.
 
-== Feedback and other resources
+## Feedback and other resources
 
-At http://rubyforge.org/projects/daemons.
+At [http://rubyforge.org/projects/daemons]().
