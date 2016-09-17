@@ -157,14 +157,14 @@ module Daemonize
       rd.close
       
       # Detach from the controlling terminal
-      unless sess_id = Process.setsid
+      unless Process.setsid
         raise Daemons.RuntimeException.new('cannot detach from controlling terminal')
       end
   
       # Prevent the possibility of acquiring a controlling terminal
       #if oldmode.zero?
         trap 'SIGHUP', 'IGNORE'
-        exit if pid = safefork
+        exit if safefork
       #end
   
       wr.write Process.pid
@@ -210,7 +210,7 @@ module Daemonize
     # Prevent the possibility of acquiring a controlling terminal
     #if oldmode.zero?
       trap 'SIGHUP', 'IGNORE'
-      exit if pid = safefork
+      exit if safefork
     #end
 
     $0 = app_name if app_name
