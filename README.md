@@ -54,9 +54,9 @@ $ ruby myserver_control.rb restart
 $ ruby myserver_control.rb stop
 ```
 For testing purposes you can even run <tt>myserver.rb</tt> <i>without forking</i> in the background:
-
-  $ ruby myserver_control.rb run
-
+```
+$ ruby myserver_control.rb run
+```
 An additional nice feature of Daemons is that you can pass <i>additional arguments</i> to the script that 
 should be daemonized by seperating them by two _hyphens_:
 ```
